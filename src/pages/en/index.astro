@@ -5,6 +5,7 @@ import HeroSearch from "../../components/HeroSearch.astro";
 import ConditionCard from "../../components/ConditionCard.astro";
 import { getCollection } from "astro:content";
 import { t } from "../../i18n/translations";
+import { basePath } from "../../i18n/config";
 import type { Locale } from "../../i18n/config";
 
 const locale: Locale = "en";
@@ -46,7 +47,7 @@ const alternateUrl = "https://hulpbijhuid.nl/";
       ))}
     </div>
     <div class="text-center mt-10">
-      <a href="/en/conditions/" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-dark transition-colors">
+      <a href={basePath("/en/conditions/")} class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-dark transition-colors">
         {t("allConditions", locale)}
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>

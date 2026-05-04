@@ -8,6 +8,7 @@ import AtoZIndex from "../../components/AtoZIndex.astro";
 import ConditionCard from "../../components/ConditionCard.astro";
 import { getCollection } from "astro:content";
 import { t } from "../../i18n/translations";
+import { basePath } from "../../i18n/config";
 
 const locale = "nl" as const;
 const allConditions = await getCollection("conditions_nl", ({ data }) => data.published);
@@ -103,7 +104,7 @@ const jsonLd = [{
         {activeCategory && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">{categoryMap.get(activeCategory)?.name || activeCategory}</span>}
         {activeLetter && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Letter: {activeLetter}</span>}
         {searchQuery && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Zoeken: {searchQuery}</span>}
-        <a href="/aandoeningen/" class="text-primary hover:underline text-xs">Wis filters</a>
+        <a href={basePath("/aandoeningen/")} class="text-primary hover:underline text-xs">Wis filters</a>
       </div>
     )}
 

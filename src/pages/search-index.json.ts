@@ -1,5 +1,6 @@
 // src/pages/search-index.json.ts
 import { getCollection } from "astro:content";
+import { basePath } from "../i18n/config";
 
 export async function GET() {
 	const nlConditions = await getCollection(
@@ -14,13 +15,13 @@ export async function GET() {
 	const index = [
 		...nlConditions.map((c) => ({
 			title: c.data.title_nl || c.data.title,
-			slug: `/aandoeningen/${c.data.slug}/`,
+			slug: basePath(`/aandoeningen/${c.data.slug}/`),
 			category: c.data.category_nl || c.data.category,
 			summary: c.data.summary_nl || c.data.summary,
 		})),
 		...enConditions.map((c) => ({
 			title: c.data.title,
-			slug: `/en/conditions/${c.data.slug}/`,
+			slug: basePath(`/en/conditions/${c.data.slug}/`),
 			category: c.data.category,
 			summary: c.data.summary,
 		})),
