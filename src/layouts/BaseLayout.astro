@@ -1,0 +1,59 @@
+---
+// src/layouts/BaseLayout.astro
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SEO from "../components/SEO.astro";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+  canonicalURL: URL;
+  alternateNl?: string;
+  alternateEn?: string;
+  xDefault?: string;
+  ogType?: "website" | "article" | "medicalwebpage";
+  ogImage?: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+  keywords?: string[];
+  currentPath?: string;
+}
+
+const {
+  title, description, locale = "nl", canonicalURL,
+  alternateNl, alternateEn, xDefault,
+  ogType, ogImage, jsonLd = [], noindex, keywords, currentPath = "/",
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={locale === "nl" ? "nl-NL" : "en-US"} dir="ltr">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <SEO
+      title={title}
+      description={description}
+      canonicalURL={canonicalURL}
+      ogType={ogType}
+      ogImage={ogImage}
+      locale={locale}
+      alternateNl={alternateNl}
+      alternateEn={alternateEn}
+      xDefault={xDefault}
+      noindex={noindex}
+      jsonLd={jsonLd}
+      keywords={keywords}
+    />
+  </head>
+  <body class="min-h-screen flex flex-col bg-bg antialiased">
+    <Header locale={locale} currentPath={currentPath} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

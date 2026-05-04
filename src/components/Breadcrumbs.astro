@@ -1,0 +1,47 @@
+---
+// src/components/Breadcrumbs.astro
+import { t } from "../i18n/translations";
+import type { Locale } from "../i18n/config";
+
+interface Crumb { label: string; href?: string; }
+interface Props {
+  crumbs: Crumb[];
+  locale?: Locale;
+}
+const { crumbs, locale = "nl" } = Astro.props;
+const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path}`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t("home", locale), item: getHref("/") },
+    ...crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 2,
+      name: c.label,
+      ...(c.href ? { item: c.href.startsWith("http") ? c.href : getHref(c.href) } : {}),
+    })),
+  ],
+};
+---
+
+<nav aria-label="Breadcrumb" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+  <ol class="flex items-center gap-1.5 text-sm text-text-muted flex-wrap">
+    <li>
+      <a href={getHref("/")} class="hover:text-primary transition-colors">{t("home", locale)}</a>
+    </li>
+    {crumbs.map((c) => (
+      <li class="flex items-center gap-1.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        {c.href ? (
+          <a href={c.href.startsWith("http") ? c.href : getHref(c.href)} class="hover:text-primary transition-colors">{c.label}</a>
+        ) : (
+          <span class="text-text font-medium">{c.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

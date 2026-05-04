@@ -1,0 +1,22 @@
+---
+// src/components/LanguageToggle.astro
+import { localeNames, localeFlags, getLocalizedPath } from "../i18n/config";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+const { locale: currentLocale, currentPath } = Astro.props;
+const otherLocale: Locale = currentLocale === "nl" ? "en" : "nl";
+const href = getLocalizedPath(currentPath, otherLocale, currentLocale);
+---
+
+<a
+  href={href}
+  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border border-border bg-white hover:bg-bg transition-colors no-underline"
+  title={localeNames[otherLocale]}
+>
+  <span>{localeFlags[otherLocale]}</span>
+  <span class="hidden sm:inline">{localeNames[otherLocale]}</span>
+</a>
