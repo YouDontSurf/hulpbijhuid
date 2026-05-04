@@ -9,7 +9,7 @@ export const localeNames: Record<Locale, string> = {
 
 export const localeFlags: Record<Locale, string> = {
   nl: "🇳🇱",
-  en: "🇬🇧",
+  en: "🇺🇸",
 };
 
 export interface LocalizedRoute {
@@ -25,17 +25,47 @@ export const routeMap: Record<string, LocalizedRoute> = {
   doctor: { nl: "/wanneer-naar-de-dokter/", en: "/en/when-to-see-doctor/" },
 };
 
+// Prefix pairs for path swapping between locales
+type PrefixPair = readonly [string, string];
+
+const nlFirst: PrefixPair[] = Object.values(routeMap)
+  .map((r) => [r.nl, r.en] as const)
+  .sort((a, b) => b[0].length - a[0].length);
+const enFirst: PrefixPair[] = Object.values(routeMap)
+  .map((r) => [r.en, r.nl] as const)
+  .sort((a, b) => b[0].length - a[0].length);
+
 export function getLocalizedPath(
   path: string,
   targetLocale: Locale,
   currentLocale: Locale,
 ): string {
-  let stripped = path;
-  if (currentLocale !== "nl") {
-    stripped = path.replace(`/${currentLocale}`, "") || "/";
+  // If same locale, return as-is
+  if (targetLocale === currentLocale) {
+    return path;
   }
-  if (targetLocale === "nl") return stripped;
-  return `/${targetLocale}${stripped === "/" ? "/" : stripped}`;
+
+  // Normalize: ensure trailing slash
+  const normalPath = path.endsWith("/") ? path : path + "/";
+
+  // Determine swap direction
+  const pairs = currentLocale === "nl" ? nlFirst : enFirst;
+
+  for (const [fromPrefix, toPrefix] of pairs) {
+    if (normalPath === fromPrefix) {
+      return toPrefix;
+    }
+    if (normalPath.startsWith(fromPrefix)) {
+      const rest = normalPath.slice(fromPrefix.length);
+      return `${toPrefix}${rest}`;
+    }
+  }
+
+  // Fallback: swap locale prefix in path
+  if (currentLocale !== "nl") {
+    return normalPath.replace(/^\/en\//, "/");
+  }
+  return `/en${normalPath}`;
 }
 
 export function getAlternateUrls(
