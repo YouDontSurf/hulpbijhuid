@@ -1,0 +1,73 @@
+---
+// src/components/SEO.astro
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL: URL;
+  ogImage?: string;
+  ogType?: "website" | "article" | "medicalwebpage";
+  locale?: "nl" | "en";
+  alternateNl?: string;
+  alternateEn?: string;
+  xDefault?: string;
+  noindex?: boolean;
+  jsonLd?: object[];
+  keywords?: string[];
+}
+
+const {
+  title,
+  description,
+  canonicalURL,
+  ogImage,
+  ogType = "website",
+  locale = "nl",
+  alternateNl,
+  alternateEn,
+  xDefault,
+  noindex = false,
+  jsonLd = [],
+  keywords = [],
+} = Astro.props;
+
+const ogLocale = locale === "nl" ? "nl_NL" : "en_US";
+const siteName = "Hulp Bij Huid";
+---
+
+<!-- Primary Meta -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<link rel="canonical" href={canonicalURL.href} />
+
+<!-- Robots -->
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+<!-- Keywords -->
+{keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+
+<!-- OG -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL.href} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content={ogLocale} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+
+<!-- hreflang -->
+{alternateNl && <link rel="alternate" hreflang="nl" href={alternateNl} />}
+{alternateEn && <link rel="alternate" hreflang="en" href={alternateEn} />}
+{xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
+
+<!-- JSON-LD Structured Data -->
+{jsonLd.map((item) => (
+  <script type="application/ld+json" set:html={JSON.stringify(item)} />
+))}
