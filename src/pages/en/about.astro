@@ -1,0 +1,27 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+const canonicalURL = new URL("https://hulpbijhuid.nl/en/about/");
+---
+<PageLayout
+  title="About Us"
+  description="About Hulp Bij Huid — Your trusted resource for skin condition information."
+  locale="en"
+  canonicalURL={canonicalURL}
+  alternateNl="https://hulpbijhuid.nl/over-ons/"
+  xDefault="https://hulpbijhuid.nl/over-ons/"
+  crumbs={[{ label: "About us" }]}
+  currentPath="/en/about/"
+>
+  <p>Welcome to <strong>Hulp Bij Huid</strong>, your trusted online guide for skin conditions. Our mission is to provide clear, expert, and up-to-date information about a wide range of skin issues.</p>
+  <h2>Our Mission</h2>
+  <p>Skin problems can be confusing and concerning. We believe everyone deserves access to reliable medical information that is easy to understand. Hulp Bij Huid helps you recognize symptoms, understand treatments, and make informed decisions about your skin health.</p>
+  <h2>What We Offer</h2>
+  <ul>
+    <li><strong>50+ Skin Conditions:</strong> Comprehensive information about symptoms, causes, and treatments.</li>
+    <li><strong>Expert Content:</strong> Based on medical guidelines and dermatological knowledge.</li>
+    <li><strong>Bilingual:</strong> Available in Dutch and English.</li>
+    <li><strong>Always Current:</strong> Regularly updated with the latest insights.</li>
+  </ul>
+  <h2>Disclaimer</h2>
+  <p>The information on Hulp Bij Huid is for educational purposes only and does not substitute professional medical advice. Always consult a doctor or dermatologist for diagnosis and treatment.</p>
+</PageLayout>

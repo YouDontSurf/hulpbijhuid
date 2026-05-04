@@ -1,0 +1,38 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import type { Locale } from "../i18n/config";
+
+interface Props {
+  title: string;
+  description: string;
+  locale?: Locale;
+  canonicalURL: URL;
+  alternateNl?: string;
+  alternateEn?: string;
+  xDefault?: string;
+  crumbs: { label: string; href?: string }[];
+  currentPath?: string;
+}
+
+const { title, description, locale = "nl", canonicalURL, alternateNl, alternateEn, xDefault, crumbs, currentPath = "/" } = Astro.props;
+---
+
+<BaseLayout
+  title={`${title} — Hulp Bij Huid`}
+  description={description}
+  locale={locale}
+  canonicalURL={canonicalURL}
+  alternateNl={alternateNl}
+  alternateEn={alternateEn}
+  xDefault={xDefault}
+  currentPath={currentPath}
+>
+  <Breadcrumbs crumbs={crumbs} locale={locale} />
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-text mb-6">{title}</h1>
+    <div class="prose prose-slate max-w-none">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

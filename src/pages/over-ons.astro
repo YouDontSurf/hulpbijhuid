@@ -1,0 +1,27 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+const canonicalURL = new URL("https://hulpbijhuid.nl/over-ons/");
+---
+<PageLayout
+  title="Over Ons"
+  description="Over Hulp Bij Huid — Uw betrouwbare bron voor informatie over huidaandoeningen."
+  locale="nl"
+  canonicalURL={canonicalURL}
+  alternateEn="https://hulpbijhuid.nl/en/about/"
+  xDefault="https://hulpbijhuid.nl/over-ons/"
+  crumbs={[{ label: "Over ons" }]}
+  currentPath="/over-ons/"
+>
+  <p>Welkom bij <strong>Hulp Bij Huid</strong>, uw betrouwbare online gids voor huidaandoeningen. Onze missie is om duidelijke, deskundige en actuele informatie te bieden over een breed scala aan huidproblemen.</p>
+  <h2>Onze Missie</h2>
+  <p>Huidproblemen kunnen verwarrend en zorgwekkend zijn. Wij geloven dat iedereen toegang verdient tot betrouwbare medische informatie die makkelijk te begrijpen is. Hulp Bij Huid helpt u symptomen te herkennen, behandelingen te begrijpen en weloverwogen beslissingen te nemen over uw huidgezondheid.</p>
+  <h2>Wat Wij Bieden</h2>
+  <ul>
+    <li><strong>50+ Huidaandoeningen:</strong> Uitgebreide informatie over symptomen, oorzaken en behandelingen.</li>
+    <li><strong>Deskundige Inhoud:</strong> Gebaseerd op medische richtlijnen en dermatologische kennis.</li>
+    <li><strong>Tweetalig:</strong> Beschikbaar in Nederlands en Engels.</li>
+    <li><strong>Altijd Actueel:</strong> Regelmatig bijgewerkt met de nieuwste inzichten.</li>
+  </ul>
+  <h2>Disclaimer</h2>
+  <p>De informatie op Hulp Bij Huid is uitsluitend voor educatieve doeleinden en vervangt geen professioneel medisch advies. Raadpleeg altijd een arts of dermatoloog voor diagnose en behandeling.</p>
+</PageLayout>
