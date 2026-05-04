@@ -1,0 +1,76 @@
+---
+// src/components/SearchBar.astro
+import { t } from "../i18n/translations";
+import type { Locale } from "../i18n/config";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const noResultsText = t("noResults", locale);
+---
+
+<div class="relative w-full max-w-xl">
+  <input
+    type="text"
+    id="search-input"
+    placeholder={t("searchPlaceholder", locale)}
+    data-no-results={noResultsText}
+    class="w-full px-5 py-4 pl-12 rounded-xl border border-border bg-white text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-base shadow-sm"
+    autocomplete="off"
+  />
+  <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <div id="search-results" class="absolute top-full mt-2 left-0 right-0 bg-white border border-border rounded-xl shadow-lg overflow-hidden hidden z-50 max-h-80 overflow-y-auto"></div>
+</div>
+
+<script>
+  interface ConditionItem { title: string; slug: string; category: string; summary: string; }
+  const input = document.getElementById("search-input") as HTMLInputElement;
+  const results = document.getElementById("search-results") as HTMLElement;
+  if (!input || !results) throw new Error("Search elements missing");
+
+  const noResultsText = input.dataset.noResults || "Geen resultaten gevonden";
+  let conditions: ConditionItem[] = [];
+
+  async function loadConditions() {
+    const resp = await fetch("/search-index.json");
+    if (resp.ok) conditions = await resp.json();
+  }
+  loadConditions();
+
+  function filter(query: string): ConditionItem[] {
+    const q = query.toLowerCase();
+    return conditions.filter(c =>
+      c.title.toLowerCase().includes(q) ||
+      c.category.toLowerCase().includes(q) ||
+      c.summary.toLowerCase().includes(q)
+    ).slice(0, 8);
+  }
+
+  function render(items: ConditionItem[]) {
+    if (items.length === 0) {
+      results.innerHTML = `<div class="p-4 text-sm text-text-muted">${noResultsText}</div>`;
+    } else {
+      results.innerHTML = items.map(c => `
+        <a href="${c.slug}" class="block px-4 py-3 hover:bg-bg transition-colors border-b border-border last:border-0">
+          <div class="font-medium text-text text-sm">${c.title}</div>
+          <div class="text-xs text-text-muted mt-0.5">${c.category}</div>
+        </a>`).join("");
+    }
+    results.classList.remove("hidden");
+  }
+
+  input.addEventListener("input", () => {
+    const val = input.value.trim();
+    if (val.length < 2) { results.classList.add("hidden"); return; }
+    render(filter(val));
+  });
+
+  input.addEventListener("focus", () => {
+    const val = input.value.trim();
+    if (val.length >= 2) render(filter(val));
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!input.contains(e.target as Node) && !results.contains(e.target as Node)) {
+      results.classList.add("hidden");
+    }
+  });
+</script>

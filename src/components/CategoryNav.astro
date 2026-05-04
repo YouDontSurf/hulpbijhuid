@@ -1,0 +1,43 @@
+---
+// src/components/CategoryNav.astro
+import type { Locale } from "../i18n/config";
+
+interface Category {
+  key: string;
+  name: string;
+  icon: string;
+  count: number;
+}
+
+interface Props {
+  categories: Category[];
+  locale?: Locale;
+  activeCategory?: string;
+}
+
+const { categories, locale = "nl", activeCategory } = Astro.props;
+const allLabel = locale === "nl" ? "Alle" : "All";
+const getCatHref = (key: string) => {
+  const base = locale === "nl" ? "/aandoeningen/" : "/en/conditions/";
+  return key ? `${base}?categorie=${key}` : base;
+};
+---
+
+<div class="flex flex-wrap gap-2">
+  <a
+    href={getCatHref("")}
+    class={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!activeCategory ? "bg-primary text-white" : "bg-white text-text border border-border hover:bg-bg"}`}
+  >
+    {allLabel} ({categories.reduce((s, c) => s + c.count, 0)})
+  </a>
+  {categories.map((cat) => (
+    <a
+      href={getCatHref(cat.key)}
+      class={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${activeCategory === cat.key ? "bg-primary text-white" : "bg-white text-text border border-border hover:bg-bg"}`}
+    >
+      <span>{cat.icon}</span>
+      <span>{cat.name}</span>
+      <span class="opacity-70">({cat.count})</span>
+    </a>
+  ))}
+</div>
