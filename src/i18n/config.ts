@@ -76,27 +76,27 @@ export function getLocalizedPath(
  * locale-correct version for any locale.
  */
 export function getLocalizedHref(path: string, locale: Locale): string {
-  if (locale === "nl") return path.endsWith("/") ? path : path + "/";
+	if (locale === "nl") return path.endsWith("/") ? path : path + "/";
 
-  const normalPath = path.endsWith("/") ? path : path + "/";
+	const normalPath = path.endsWith("/") ? path : path + "/";
 
-  // Sort routeMap entries by prefix length descending for correct matching
-  const routes = Object.values(routeMap).sort(
-    (a, b) => b.nl.length - a.nl.length,
-  );
+	// Sort routeMap entries by prefix length descending for correct matching
+	const routes = Object.values(routeMap).sort(
+		(a, b) => b.nl.length - a.nl.length,
+	);
 
-  for (const route of routes) {
-    if (normalPath === route.nl) {
-      return route.en;
-    }
-    if (normalPath.startsWith(route.nl)) {
-      const rest = normalPath.slice(route.nl.length);
-      return `${route.en}${rest}`;
-    }
-  }
+	for (const route of routes) {
+		if (normalPath === route.nl) {
+			return route.en;
+		}
+		if (normalPath.startsWith(route.nl)) {
+			const rest = normalPath.slice(route.nl.length);
+			return `${route.en}${rest}`;
+		}
+	}
 
-  // Fallback: just prefix with /en/
-  return `/en${normalPath}`;
+	// Fallback: just prefix with /en/
+	return `/en${normalPath}`;
 }
 
 export function getAlternateUrls(

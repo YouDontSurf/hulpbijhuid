@@ -4,7 +4,7 @@ title_nl: "Het Verschil Tussen Eczeem en Psoriasis"
 slug: "verschil-eczeem-psoriasis"
 category: "aandoeningen"
 category_nl: "Aandoeningen"
-tags: ["eczeem","psoriasis","huidziekten","verschillen"]
+tags: ["eczeem", "psoriasis", "huidziekten", "verschillen"]
 summary: "Eczeem en psoriasis worden vaak verward. Lees de belangrijkste verschillen in symptomen, oorzaken en behandeling."
 summary_nl: "Eczeem en psoriasis worden vaak verward. Lees de belangrijkste verschillen in symptomen, oorzaken en behandeling."
 seo_title: "Verschil Tussen Eczeem en Psoriasis — Hulp Bij Huid"

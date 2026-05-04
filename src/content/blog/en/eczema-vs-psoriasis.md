@@ -4,7 +4,7 @@ title_nl: "Het Verschil Tussen Eczeem en Psoriasis"
 slug: "eczema-vs-psoriasis"
 category: "conditions"
 category_nl: "Aandoeningen"
-tags: ["eczema","psoriasis","skin conditions","differences"]
+tags: ["eczema", "psoriasis", "skin conditions", "differences"]
 summary: "Eczema and psoriasis are often confused. Learn the key differences in symptoms, causes, and treatment."
 summary_nl: "Eczeem en psoriasis worden vaak verward. Lees de belangrijkste verschillen in symptomen, oorzaken en behandeling."
 seo_title: "Difference Between Eczema and Psoriasis — Hulp Bij Huid"

@@ -8,30 +8,30 @@ const site = process.env.SITE_URL || "https://hulpbijhuid.nl";
 const base = process.env.ASTRO_BASE || undefined;
 
 export default defineConfig({
-  site,
-  base,
-  integrations: [
-    sitemap({
-      i18n: {
-        defaultLocale: "nl",
-        locales: {
-          nl: "nl-NL",
-          en: "en-US",
-        },
-      },
-    }),
-  ],
-  vite: {
-    plugins: [tailwindcss()],
-    build: {
-      assetsInlineLimit: 4096,
-    },
-  },
-  i18n: {
-    defaultLocale: "nl",
-    locales: ["nl", "en"],
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
+	site,
+	base,
+	integrations: [
+		sitemap({
+			i18n: {
+				defaultLocale: "nl",
+				locales: {
+					nl: "nl-NL",
+					en: "en-US",
+				},
+			},
+		}),
+	],
+	vite: {
+		plugins: [tailwindcss()],
+		build: {
+			assetsInlineLimit: 4096,
+		},
+	},
+	i18n: {
+		defaultLocale: "nl",
+		locales: ["nl", "en"],
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 });

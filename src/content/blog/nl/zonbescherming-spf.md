@@ -4,7 +4,7 @@ title_nl: "Zonbescherming: Alles Wat U Moet Weten Over SPF"
 slug: "zonbescherming-spf"
 category: "zonbescherming"
 category_nl: "Zonbescherming"
-tags: ["zonbescherming","SPF","huidkanker","zonnebrand","zon"]
+tags: ["zonbescherming", "SPF", "huidkanker", "zonnebrand", "zon"]
 summary: "Alles over zonbescherming: SPF-waarden, UVA/UVB, hoeveelheid smeren en hoe vaak. Bescherm uw huid effectief."
 summary_nl: "Alles over zonbescherming: SPF-waarden, UVA/UVB, hoeveelheid smeren en hoe vaak. Bescherm uw huid effectief."
 seo_title: "Zonbescherming: SPF Uitgelegd — Hulp Bij Huid"
