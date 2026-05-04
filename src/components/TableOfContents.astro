@@ -1,0 +1,27 @@
+---
+// src/components/TableOfContents.astro
+import { t } from "../i18n/translations";
+import type { Locale } from "../i18n/config";
+
+interface TocItem { text: string; id: string; level: number; }
+
+interface Props {
+  items: TocItem[];
+  locale?: Locale;
+}
+
+const { items, locale = "nl" } = Astro.props;
+---
+
+{items.length > 0 && (
+  <nav class="bg-white border border-border rounded-xl p-4 sticky top-20">
+    <h4 class="font-semibold text-sm text-text mb-3">{t("onThisPage", locale)}</h4>
+    <ul class="space-y-1">
+      {items.map((item) => (
+        <li style={`padding-left: ${(item.level - 2) * 0.75}rem`}>
+          <a href={`#${item.id}`} class="text-sm text-text-muted hover:text-primary transition-colors">{item.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

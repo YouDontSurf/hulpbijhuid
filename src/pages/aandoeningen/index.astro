@@ -1,0 +1,126 @@
+---
+// src/pages/aandoeningen/index.astro
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import SearchBar from "../../components/SearchBar.astro";
+import CategoryNav from "../../components/CategoryNav.astro";
+import AtoZIndex from "../../components/AtoZIndex.astro";
+import ConditionCard from "../../components/ConditionCard.astro";
+import { getCollection } from "astro:content";
+import { t } from "../../i18n/translations";
+
+const locale = "nl" as const;
+const allConditions = await getCollection("conditions_nl", ({ data }) => data.published);
+allConditions.sort((a, b) => (a.data.order ?? 100) - (b.data.order ?? 100));
+
+// Category grouping
+const categoryMap = new Map<string, { name: string; icon: string; conditions: typeof allConditions }>();
+for (const c of allConditions) {
+  const key = c.data.category;
+  if (!categoryMap.has(key)) {
+    categoryMap.set(key, { name: c.data.category_nl || key, icon: c.data.icon || "📋", conditions: [] });
+  }
+  categoryMap.get(key)!.conditions.push(c);
+}
+
+const categories = Array.from(categoryMap.entries()).map(([key, val]) => ({
+  key, name: val.name, icon: val.icon, count: val.conditions.length,
+}));
+
+// A-Z inventory
+const activeLetters = new Set(allConditions.map(c => (c.data.title_nl || c.data.title)[0].toUpperCase()));
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(l => ({
+  letter: l, active: activeLetters.has(l),
+}));
+
+// Get query params for filter
+const url = new URL(Astro.request.url);
+const activeCategory = url.searchParams.get("categorie") || "";
+const activeLetter = url.searchParams.get("letter") || "";
+const searchQuery = url.searchParams.get("q") || "";
+
+let filtered = allConditions;
+if (activeCategory) {
+  filtered = filtered.filter(c => c.data.category === activeCategory);
+}
+if (activeLetter) {
+  filtered = filtered.filter(c => (c.data.title_nl || c.data.title)[0].toUpperCase() === activeLetter);
+}
+if (searchQuery) {
+  const q = searchQuery.toLowerCase();
+  filtered = filtered.filter(c =>
+    (c.data.title_nl || c.data.title).toLowerCase().includes(q) ||
+    (c.data.summary_nl || c.data.summary).toLowerCase().includes(q)
+  );
+}
+
+const canonicalURL = new URL("https://hulpbijhuid.nl/aandoeningen/");
+const jsonLd = [{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Huidaandoeningen — Hulp Bij Huid",
+  description: "Overzicht van alle huidaandoeningen op Hulp Bij Huid. Vind informatie over symptomen, oorzaken en behandelingen.",
+  url: canonicalURL.href,
+}];
+---
+
+<BaseLayout
+  title="Huidaandoeningen — Hulp Bij Huid"
+  description="Overzicht van alle huidaandoeningen op Hulp Bij Huid. Vind informatie over symptomen, oorzaken en behandelingen."
+  locale="nl"
+  canonicalURL={canonicalURL}
+  alternateEn="https://hulpbijhuid.nl/en/conditions/"
+  xDefault="https://hulpbijhuid.nl/aandoeningen/"
+  jsonLd={jsonLd}
+  keywords={allConditions.map(c => c.data.title_nl || c.data.title)}
+  currentPath="/aandoeningen/"
+>
+  <Breadcrumbs crumbs={[{ label: t("conditions", locale) }]} locale={locale} />
+
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-text mb-2">Huidaandoeningen</h1>
+    <p class="text-text-muted mb-6">Een compleet overzicht van huidaandoeningen met symptomen, oorzaken en behandelingen.</p>
+
+    <!-- Search -->
+    <div class="mb-8">
+      <SearchBar locale={locale} />
+    </div>
+
+    <!-- A-Z -->
+    <div class="mb-8">
+      <AtoZIndex letters={alphabet} locale={locale} basePath="/aandoeningen/" />
+    </div>
+
+    <!-- Categories -->
+    <div class="mb-8">
+      <CategoryNav categories={categories} locale={locale} activeCategory={activeCategory} />
+    </div>
+
+    <!-- Active filters -->
+    {(activeCategory || activeLetter || searchQuery) && (
+      <div class="mb-6 flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-text-muted">Filters:</span>
+        {activeCategory && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">{categoryMap.get(activeCategory)?.name || activeCategory}</span>}
+        {activeLetter && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Letter: {activeLetter}</span>}
+        {searchQuery && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Zoeken: {searchQuery}</span>}
+        <a href="/aandoeningen/" class="text-primary hover:underline text-xs">Wis filters</a>
+      </div>
+    )}
+
+    <!-- Results -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {filtered.length === 0 ? (
+        <p class="col-span-full text-center text-text-muted py-12">{t("noResults", locale)}</p>
+      ) : (
+        filtered.map((c) => (
+          <ConditionCard
+            title={c.data.title_nl || c.data.title}
+            slug={`/aandoeningen/${c.data.slug}/`}
+            category={c.data.category_nl || c.data.category}
+            summary={c.data.summary_nl || c.data.summary}
+          />
+        ))
+      )}
+    </div>
+  </section>
+</BaseLayout>

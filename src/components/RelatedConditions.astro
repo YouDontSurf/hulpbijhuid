@@ -1,0 +1,29 @@
+---
+// src/components/RelatedConditions.astro
+import ConditionCard from "./ConditionCard.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  conditions: CollectionEntry<"conditions_nl" | "conditions_en">[];
+  title: string;
+  locale?: "nl" | "en";
+}
+const { conditions, title, locale = "nl" } = Astro.props;
+const basePath = locale === "nl" ? "/aandoeningen" : "/en/conditions";
+---
+
+{conditions.length > 0 && (
+  <section class="mt-10">
+    <h3 class="text-xl font-bold text-text mb-4">{title}</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {conditions.map((c) => (
+        <ConditionCard
+          title={locale === "nl" ? (c.data.title_nl || c.data.title) : c.data.title}
+          slug={`${basePath}/${c.data.slug}/`}
+          category={locale === "nl" ? (c.data.category_nl || c.data.category) : c.data.category}
+          summary={locale === "nl" ? (c.data.summary_nl || c.data.summary) : c.data.summary}
+        />
+      ))}
+    </div>
+  </section>
+)}

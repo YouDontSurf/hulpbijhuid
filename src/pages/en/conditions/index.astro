@@ -1,0 +1,98 @@
+---
+// src/pages/en/conditions/index.astro
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import SearchBar from "../../../components/SearchBar.astro";
+import CategoryNav from "../../../components/CategoryNav.astro";
+import AtoZIndex from "../../../components/AtoZIndex.astro";
+import ConditionCard from "../../../components/ConditionCard.astro";
+import { getCollection } from "astro:content";
+import { t } from "../../../i18n/translations";
+
+const locale = "en" as const;
+const allConditions = await getCollection("conditions_en", ({ data }) => data.published);
+allConditions.sort((a, b) => (a.data.order ?? 100) - (b.data.order ?? 100));
+
+const categoryMap = new Map<string, { name: string; icon: string; conditions: typeof allConditions }>();
+for (const c of allConditions) {
+  const key = c.data.category;
+  if (!categoryMap.has(key)) {
+    categoryMap.set(key, { name: c.data.category, icon: c.data.icon || "📋", conditions: [] });
+  }
+  categoryMap.get(key)!.conditions.push(c);
+}
+
+const categories = Array.from(categoryMap.entries()).map(([key, val]) => ({
+  key, name: val.name, icon: val.icon, count: val.conditions.length,
+}));
+
+const activeLetters = new Set(allConditions.map(c => c.data.title[0].toUpperCase()));
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(l => ({
+  letter: l, active: activeLetters.has(l),
+}));
+
+const url = new URL(Astro.request.url);
+const activeCategory = url.searchParams.get("categorie") || "";
+const activeLetter = url.searchParams.get("letter") || "";
+const searchQuery = url.searchParams.get("q") || "";
+
+let filtered = allConditions;
+if (activeCategory) filtered = filtered.filter(c => c.data.category === activeCategory);
+if (activeLetter) filtered = filtered.filter(c => c.data.title[0].toUpperCase() === activeLetter);
+if (searchQuery) {
+  const q = searchQuery.toLowerCase();
+  filtered = filtered.filter(c =>
+    c.data.title.toLowerCase().includes(q) ||
+    c.data.summary.toLowerCase().includes(q)
+  );
+}
+
+const canonicalURL = new URL("https://hulpbijhuid.nl/en/conditions/");
+---
+
+<BaseLayout
+  title="Skin Conditions — Hulp Bij Huid"
+  description="Overview of all skin conditions on Hulp Bij Huid. Find information about symptoms, causes and treatments."
+  locale="en"
+  canonicalURL={canonicalURL}
+  alternateNl="https://hulpbijhuid.nl/aandoeningen/"
+  xDefault="https://hulpbijhuid.nl/aandoeningen/"
+  jsonLd={[{ "@context": "https://schema.org", "@type": "CollectionPage", name: "Skin Conditions — Hulp Bij Huid", description: "Overview of all skin conditions. Find information about symptoms, causes and treatments.", url: canonicalURL.href }]}
+  currentPath="/en/conditions/"
+>
+  <Breadcrumbs crumbs={[{ label: t("conditions", locale) }]} locale={locale} />
+
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-text mb-2">Skin Conditions</h1>
+    <p class="text-text-muted mb-6">A complete overview of skin conditions with symptoms, causes and treatments.</p>
+
+    <div class="mb-8"><SearchBar locale={locale} /></div>
+    <div class="mb-8"><AtoZIndex letters={alphabet} locale={locale} basePath="/en/conditions/" /></div>
+    <div class="mb-8"><CategoryNav categories={categories} locale={locale} activeCategory={activeCategory} /></div>
+
+    {(activeCategory || activeLetter || searchQuery) && (
+      <div class="mb-6 flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-text-muted">Filters:</span>
+        {activeCategory && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">{categoryMap.get(activeCategory)?.name || activeCategory}</span>}
+        {activeLetter && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Letter: {activeLetter}</span>}
+        {searchQuery && <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium">Search: {searchQuery}</span>}
+        <a href="/en/conditions/" class="text-primary hover:underline text-xs">Clear filters</a>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {filtered.length === 0 ? (
+        <p class="col-span-full text-center text-text-muted py-12">{t("noResults", locale)}</p>
+      ) : (
+        filtered.map((c) => (
+          <ConditionCard
+            title={c.data.title}
+            slug={`/en/conditions/${c.data.slug}/`}
+            category={c.data.category}
+            summary={c.data.summary}
+          />
+        ))
+      )}
+    </div>
+  </section>
+</BaseLayout>

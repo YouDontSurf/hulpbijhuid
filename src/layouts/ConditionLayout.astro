@@ -1,0 +1,114 @@
+---
+// src/layouts/ConditionLayout.astro
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import FAQSection from "../components/FAQSection.astro";
+import RelatedConditions from "../components/RelatedConditions.astro";
+import { t } from "../i18n/translations";
+import type { Locale } from "../i18n/config";
+import type { CollectionEntry } from "astro:content";
+
+interface HeadingItem { text: string; id: string; level: number; }
+
+interface Props {
+  condition: CollectionEntry<"conditions_nl" | "conditions_en">;
+  related: CollectionEntry<"conditions_nl" | "conditions_en">[];
+  locale: Locale;
+  canonicalURL: URL;
+  alternateNl?: string;
+  alternateEn?: string;
+  xDefault?: string;
+  headings?: HeadingItem[];
+}
+
+const { condition, related, locale, canonicalURL, alternateNl, alternateEn, xDefault, headings = [] } = Astro.props;
+const d = condition.data;
+const title = locale === "nl" ? (d.title_nl || d.title) : d.title;
+const categoryName = locale === "nl" ? (d.category_nl || d.category) : d.category;
+const summary = locale === "nl" ? (d.summary_nl || d.summary) : d.summary;
+const baseSlug = locale === "nl" ? "/aandoeningen" : "/en/conditions";
+
+
+
+// Breadcrumbs for desktop view
+const crumbs = [
+  { label: t("conditions", locale), href: baseSlug + "/" },
+  { label: title },
+];
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: title,
+    description: summary,
+    about: { "@type": "MedicalCondition", name: title },
+    lastReviewed: (d.updated || new Date()).toISOString().split("T")[0],
+    medicalAudience: { "@type": "MedicalAudience", audienceType: "patients" },
+    specialty: { "@type": "MedicalSpecialty", name: "Dermatology" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalCondition",
+    name: title,
+    description: summary,
+    relevantSpecialty: { "@type": "MedicalSpecialty", name: "Dermatology" },
+  },
+];
+---
+
+<BaseLayout
+  title={`${title} — ${t("siteName", locale)}`}
+  description={d.seo_description}
+  locale={locale}
+  canonicalURL={canonicalURL}
+  alternateNl={alternateNl}
+  alternateEn={alternateEn}
+  xDefault={xDefault}
+  ogType="medicalwebpage"
+  jsonLd={jsonLd}
+  keywords={d.keywords}
+  currentPath={`${baseSlug}/${d.slug}/`}
+>
+  <Breadcrumbs crumbs={crumbs} locale={locale} />
+
+  <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">
+      <!-- Main content -->
+      <div class="min-w-0">
+        <div class="mb-6">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">{categoryName}</span>
+          <h1 class="text-3xl sm:text-4xl font-bold text-text mt-2 mb-3">{title}</h1>
+          <p class="text-lg text-text-muted">{summary}</p>
+        </div>
+
+        <div class="bg-white border border-border rounded-xl p-6 sm:p-8">
+          <div class="prose prose-slate max-w-none
+            prose-headings:text-text prose-headings:font-bold
+            prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4
+            prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-3
+            prose-p:text-text prose-p:leading-relaxed
+            prose-li:text-text prose-li:leading-relaxed
+            prose-strong:text-text prose-strong:font-semibold
+            prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+            <slot />
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        {d.faq && d.faq.length > 0 && (
+          <FAQSection faqs={d.faq} title={t("frequentlyAsked", locale)} />
+        )}
+
+        <!-- Related Conditions -->
+        <RelatedConditions conditions={related} title={t("relatedConditions", locale)} locale={locale} />
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="hidden lg:block">
+        <TableOfContents items={headings} locale={locale} />
+      </aside>
+    </div>
+  </article>
+</BaseLayout>

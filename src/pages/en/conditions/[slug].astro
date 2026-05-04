@@ -1,0 +1,36 @@
+---
+// src/pages/en/conditions/[slug].astro
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import ConditionLayout from "../../../layouts/ConditionLayout.astro";
+
+export async function getStaticPaths() {
+  const conditions = await getCollection("conditions_en", ({ data }) => data.published);
+  return conditions.map((c) => ({
+    params: { slug: c.data.slug },
+    props: { condition: c },
+  }));
+}
+
+const { condition } = Astro.props as { condition: CollectionEntry<"conditions_en"> };
+
+const allConditions = await getCollection("conditions_en", ({ data }) => data.published);
+const related = allConditions.filter(c =>
+  condition.data.related.includes(c.data.slug)
+);
+
+const { Content, headings } = await render(condition);
+
+const canonicalURL = new URL(`https://hulpbijhuid.nl/en/conditions/${condition.data.slug}/`);
+---
+
+<ConditionLayout
+  condition={condition}
+  related={related}
+  locale="en"
+  canonicalURL={canonicalURL}
+  alternateNl={`https://hulpbijhuid.nl/aandoeningen/${condition.data.slug}/`}
+  xDefault={`https://hulpbijhuid.nl/aandoeningen/${condition.data.slug}/`}
+  headings={headings}
+>
+  <Content />
+</ConditionLayout>

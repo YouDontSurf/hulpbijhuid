@@ -1,0 +1,26 @@
+---
+// src/components/AtoZIndex.astro
+interface Props {
+  letters: { letter: string; active: boolean }[];
+  locale?: "nl" | "en";
+  basePath?: string;
+}
+const { letters, locale = "nl", basePath } = Astro.props;
+---
+
+<nav class="flex flex-wrap gap-1" aria-label="A-Z index">
+  {letters.map(({ letter, active }) => (
+    active ? (
+      <a
+        href={`${basePath ?? (locale === "nl" ? "/aandoeningen/" : "/en/conditions/")}?letter=${letter}`}
+        class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium bg-white border border-border text-text hover:bg-primary hover:text-white hover:border-primary transition-all"
+      >
+        {letter}
+      </a>
+    ) : (
+      <span class="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium text-text-muted/40">
+        {letter}
+      </span>
+    )
+  ))}
+</nav>
