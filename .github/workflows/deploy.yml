@@ -51,11 +51,6 @@ jobs:
           SITE_URL: ${{ steps.config.outputs.site_url || 'https://hulpbijhuid.nl' }}
           ASTRO_BASE: ${{ steps.config.outputs.base_path }}
 
-      - name: Create CNAME for custom domain
-        if: vars.DOMAIN != ''
-        run: echo "${{ vars.DOMAIN }}" > dist/CNAME
-        working-directory: ${{ github.workspace }}
-
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
