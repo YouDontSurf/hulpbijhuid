@@ -90,6 +90,7 @@ hulpbijhuid/
 ## Task 1: Project Scaffolding & Dependencies
 
 **Files:**
+
 - Create: `package.json`
 - Create: `tsconfig.json`
 - Create: `astro.config.ts`
@@ -159,15 +160,17 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://hulpbijhuid.nl",
-  integrations: [sitemap({
-    i18n: {
-      defaultLocale: "nl",
-      locales: {
-        nl: "nl-NL",
-        en: "en-US",
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: "nl",
+        locales: {
+          nl: "nl-NL",
+          en: "en-US",
+        },
       },
-    },
-  })],
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
@@ -205,7 +208,12 @@ body {
   line-height: 1.7;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.3;
   font-weight: 700;
   color: var(--color-text);
@@ -259,6 +267,7 @@ git commit -m "chore: scaffold Astro project with Tailwind CSS v4 and dependenci
 ## Task 2: i18n Infrastructure
 
 **Files:**
+
 - Create: `src/i18n/config.ts`
 - Create: `src/i18n/translations.ts`
 
@@ -293,7 +302,11 @@ export const routeMap: Record<string, LocalizedRoute> = {
   doctor: { nl: "/wanneer-naar-de-dokter/", en: "/en/when-to-see-doctor/" },
 };
 
-export function getLocalizedPath(path: string, targetLocale: Locale, currentLocale: Locale): string {
+export function getLocalizedPath(
+  path: string,
+  targetLocale: Locale,
+  currentLocale: Locale,
+): string {
   // Strip locale prefix if present
   let stripped = path;
   if (currentLocale !== "nl") {
@@ -303,7 +316,10 @@ export function getLocalizedPath(path: string, targetLocale: Locale, currentLoca
   return `/${targetLocale}${stripped === "/" ? "/" : stripped}`;
 }
 
-export function getAlternateUrls(path: string, currentLocale: Locale = "nl"): { nl: string; en: string } {
+export function getAlternateUrls(
+  path: string,
+  currentLocale: Locale = "nl",
+): { nl: string; en: string } {
   return {
     nl: getLocalizedPath(path, "nl", currentLocale),
     en: getLocalizedPath(path, "en", currentLocale),
@@ -322,7 +338,8 @@ type TranslationKey = keyof typeof translations.nl;
 export const translations = {
   nl: {
     siteName: "Hulp Bij Huid",
-    siteDescription: "Complete gids over huidaandoeningen, symptomen en behandelingen",
+    siteDescription:
+      "Complete gids over huidaandoeningen, symptomen en behandelingen",
     home: "Home",
     conditions: "Aandoeningen",
     blog: "Blog",
@@ -349,7 +366,8 @@ export const translations = {
   },
   en: {
     siteName: "Hulp Bij Huid",
-    siteDescription: "Complete guide to skin conditions, symptoms and treatments",
+    siteDescription:
+      "Complete guide to skin conditions, symptoms and treatments",
     home: "Home",
     conditions: "Conditions",
     blog: "Blog",
@@ -400,6 +418,7 @@ git commit -m "feat: add i18n infrastructure with Dutch/English translations"
 ## Task 3: Content Collections — Schema & Config
 
 **Files:**
+
 - Create: `src/content/config.ts`
 
 - [ ] **Step 1: Write content collection config with all schemas**
@@ -487,6 +506,7 @@ git commit -m "feat: add content collection schemas and directories"
 ## Task 4: SEO Component with JSON-LD Structured Data
 
 **Files:**
+
 - Create: `src/components/SEO.astro`
 
 - [ ] **Step 1: Write comprehensive SEO component**
@@ -580,6 +600,7 @@ git commit -m "feat: add comprehensive SEO component with JSON-LD support"
 ## Task 5: Base Layout & UI Components
 
 **Files:**
+
 - Create: `src/layouts/BaseLayout.astro`
 - Create: `src/components/Header.astro`
 - Create: `src/components/Footer.astro`
@@ -872,6 +893,7 @@ git commit -m "feat: add base layout with header, footer, language toggle, and b
 ## Task 6: Homepage
 
 **Files:**
+
 - Create: `src/pages/index.astro` (Dutch homepage)
 - Create: `src/pages/en/index.astro` (English homepage)
 - Create: `src/components/HeroSearch.astro`
@@ -1274,6 +1296,7 @@ git commit -m "feat: add homepage with hero, search, and featured conditions gri
 ## Task 7: Conditions Overview & Detail Pages
 
 **Files:**
+
 - Create: `src/pages/aandoeningen/index.astro`
 - Create: `src/pages/aandoeningen/[slug].astro`
 - Create: `src/pages/en/conditions/index.astro`
@@ -1885,6 +1908,7 @@ git commit -m "feat: add conditions overview and detail pages with A-Z index, FA
 ## Task 8: Content Generation — 50 Skin Conditions
 
 **Files:**
+
 - Create: `scripts/generate-conditions.ts`
 - Install: `tsx` as devDependency
 
@@ -1924,14 +1948,31 @@ const conditions: Condition[] = [
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 1,
-    summary_en: "A chronic inflammatory skin condition causing dry, itchy, and inflamed patches of skin.",
-    summary_nl: "Een chronische ontstekingsaandoening van de huid die droge, jeukende en ontstoken huidplekken veroorzaakt.",
-    keywords: ["eczema", "atopic dermatitis", "itchy skin", "skin inflammation", "dry skin"],
+    summary_en:
+      "A chronic inflammatory skin condition causing dry, itchy, and inflamed patches of skin.",
+    summary_nl:
+      "Een chronische ontstekingsaandoening van de huid die droge, jeukende en ontstoken huidplekken veroorzaakt.",
+    keywords: [
+      "eczema",
+      "atopic dermatitis",
+      "itchy skin",
+      "skin inflammation",
+      "dry skin",
+    ],
     related: ["psoriasis", "contact-dermatitis", "seborrheic-dermatitis"],
     faq: [
-      { q: "Is eczema contagious?", a: "No, eczema is not contagious. It is an inflammatory condition related to genetics and environmental factors." },
-      { q: "What triggers eczema flare-ups?", a: "Common triggers include stress, allergens, irritants like soaps, temperature changes, and certain fabrics such as wool." },
-      { q: "Can eczema be cured?", a: "There is currently no cure for eczema, but symptoms can be effectively managed with proper skincare, medications, and trigger avoidance." },
+      {
+        q: "Is eczema contagious?",
+        a: "No, eczema is not contagious. It is an inflammatory condition related to genetics and environmental factors.",
+      },
+      {
+        q: "What triggers eczema flare-ups?",
+        a: "Common triggers include stress, allergens, irritants like soaps, temperature changes, and certain fabrics such as wool.",
+      },
+      {
+        q: "Can eczema be cured?",
+        a: "There is currently no cure for eczema, but symptoms can be effectively managed with proper skincare, medications, and trigger avoidance.",
+      },
     ],
     content_en: `## What is Eczema?
 
@@ -2026,14 +2067,31 @@ Raadpleeg een arts als je eczeem ernstig is, het dagelijks leven of de slaap ver
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 2,
-    summary_en: "An autoimmune condition causing rapid skin cell buildup, resulting in thick, silvery scales and red patches.",
-    summary_nl: "Een auto-immuunziekte die snelle ophoping van huidcellen veroorzaakt, resulterend in dikke, zilverachtige schilfers en rode plekken.",
-    keywords: ["psoriasis", "autoimmune skin", "scaly patches", "skin plaques", "psoriatic arthritis"],
+    summary_en:
+      "An autoimmune condition causing rapid skin cell buildup, resulting in thick, silvery scales and red patches.",
+    summary_nl:
+      "Een auto-immuunziekte die snelle ophoping van huidcellen veroorzaakt, resulterend in dikke, zilverachtige schilfers en rode plekken.",
+    keywords: [
+      "psoriasis",
+      "autoimmune skin",
+      "scaly patches",
+      "skin plaques",
+      "psoriatic arthritis",
+    ],
     related: ["eczema", "seborrheic-dermatitis", "lichen-planus"],
     faq: [
-      { q: "Is psoriasis contagious?", a: "No, psoriasis is not contagious. It is an autoimmune condition and cannot be spread through contact." },
-      { q: "What triggers psoriasis?", a: "Common triggers include stress, infections, skin injury, certain medications, and cold weather." },
-      { q: "Can psoriasis lead to other health problems?", a: "Yes, psoriasis is associated with an increased risk of psoriatic arthritis, cardiovascular disease, and metabolic syndrome." },
+      {
+        q: "Is psoriasis contagious?",
+        a: "No, psoriasis is not contagious. It is an autoimmune condition and cannot be spread through contact.",
+      },
+      {
+        q: "What triggers psoriasis?",
+        a: "Common triggers include stress, infections, skin injury, certain medications, and cold weather.",
+      },
+      {
+        q: "Can psoriasis lead to other health problems?",
+        a: "Yes, psoriasis is associated with an increased risk of psoriatic arthritis, cardiovascular disease, and metabolic syndrome.",
+      },
     ],
     content_en: `## What is Psoriasis?
 
@@ -2130,14 +2188,31 @@ Ga naar de dokter als je psoriasis wijdverspreid of pijnlijk is, je dagelijkse a
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 3,
-    summary_en: "A chronic skin condition causing facial redness, visible blood vessels, and sometimes acne-like bumps.",
-    summary_nl: "Een chronische huidaandoening die roodheid in het gezicht, zichtbare bloedvaten en soms acne-achtige bultjes veroorzaakt.",
-    keywords: ["rosacea", "facial redness", "flushing", "visible blood vessels", "acne rosacea"],
+    summary_en:
+      "A chronic skin condition causing facial redness, visible blood vessels, and sometimes acne-like bumps.",
+    summary_nl:
+      "Een chronische huidaandoening die roodheid in het gezicht, zichtbare bloedvaten en soms acne-achtige bultjes veroorzaakt.",
+    keywords: [
+      "rosacea",
+      "facial redness",
+      "flushing",
+      "visible blood vessels",
+      "acne rosacea",
+    ],
     related: ["acne-vulgaris", "eczema", "seborrheic-dermatitis"],
     faq: [
-      { q: "Does rosacea get worse with age?", a: "Yes, rosacea tends to worsen over time if left untreated, progressing through stages from flushing to persistent redness and visible blood vessels." },
-      { q: "What foods trigger rosacea?", a: "Common triggers include spicy foods, hot beverages, alcohol (especially red wine), and histamine-rich foods." },
-      { q: "Is rosacea curable?", a: "There is no cure for rosacea, but treatments can effectively control and reduce symptoms." },
+      {
+        q: "Does rosacea get worse with age?",
+        a: "Yes, rosacea tends to worsen over time if left untreated, progressing through stages from flushing to persistent redness and visible blood vessels.",
+      },
+      {
+        q: "What foods trigger rosacea?",
+        a: "Common triggers include spicy foods, hot beverages, alcohol (especially red wine), and histamine-rich foods.",
+      },
+      {
+        q: "Is rosacea curable?",
+        a: "There is no cure for rosacea, but treatments can effectively control and reduce symptoms.",
+      },
     ],
     content_en: `## What is Rosacea?
 
@@ -2228,13 +2303,27 @@ Raadpleeg een dermatoloog bij aanhoudende roodheid in het gezicht, zichtbare blo
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 4,
-    summary_en: "A common skin condition causing scaly patches, red skin, and stubborn dandruff, mainly on oily areas.",
-    summary_nl: "Een veelvoorkomende huidaandoening die schilferige plekken, rode huid en hardnekkige roos veroorzaakt, vooral op vette huidgebieden.",
-    keywords: ["seborrheic dermatitis", "dandruff", "scaly scalp", "cradle cap", "skin flakes"],
+    summary_en:
+      "A common skin condition causing scaly patches, red skin, and stubborn dandruff, mainly on oily areas.",
+    summary_nl:
+      "Een veelvoorkomende huidaandoening die schilferige plekken, rode huid en hardnekkige roos veroorzaakt, vooral op vette huidgebieden.",
+    keywords: [
+      "seborrheic dermatitis",
+      "dandruff",
+      "scaly scalp",
+      "cradle cap",
+      "skin flakes",
+    ],
     related: ["psoriasis", "eczema", "dandruff"],
     faq: [
-      { q: "Is seborrheic dermatitis a fungal infection?", a: "It involves an overgrowth of Malassezia yeast which is naturally present on skin, but it is more of an inflammatory reaction than a typical infection." },
-      { q: "Can stress cause seborrheic dermatitis?", a: "Yes, stress is a well-known trigger for seborrheic dermatitis flare-ups." },
+      {
+        q: "Is seborrheic dermatitis a fungal infection?",
+        a: "It involves an overgrowth of Malassezia yeast which is naturally present on skin, but it is more of an inflammatory reaction than a typical infection.",
+      },
+      {
+        q: "Can stress cause seborrheic dermatitis?",
+        a: "Yes, stress is a well-known trigger for seborrheic dermatitis flare-ups.",
+      },
     ],
     content_en: `## What is Seborrheic Dermatitis?
 
@@ -2325,13 +2414,27 @@ Ga naar de dokter als vrij verkrijgbare behandelingen niet werken, de aandoening
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 5,
-    summary_en: "An inflammatory condition affecting skin and mucous membranes with purple, flat-topped, itchy bumps.",
-    summary_nl: "Een ontstekingsaandoening die huid en slijmvliezen aantast met paarse, platte, jeukende bultjes.",
-    keywords: ["lichen planus", "purple bumps", "Wickham striae", "oral lichen planus", "inflammatory skin"],
+    summary_en:
+      "An inflammatory condition affecting skin and mucous membranes with purple, flat-topped, itchy bumps.",
+    summary_nl:
+      "Een ontstekingsaandoening die huid en slijmvliezen aantast met paarse, platte, jeukende bultjes.",
+    keywords: [
+      "lichen planus",
+      "purple bumps",
+      "Wickham striae",
+      "oral lichen planus",
+      "inflammatory skin",
+    ],
     related: ["psoriasis", "eczema", "lupus"],
     faq: [
-      { q: "Is lichen planus an autoimmune disease?", a: "Yes, lichen planus is believed to be an autoimmune condition where T-cells attack the skin and mucous membranes." },
-      { q: "Can lichen planus affect the mouth?", a: "Yes, oral lichen planus is common and appears as white lacy patches, red swollen tissue, or open sores in the mouth." },
+      {
+        q: "Is lichen planus an autoimmune disease?",
+        a: "Yes, lichen planus is believed to be an autoimmune condition where T-cells attack the skin and mucous membranes.",
+      },
+      {
+        q: "Can lichen planus affect the mouth?",
+        a: "Yes, oral lichen planus is common and appears as white lacy patches, red swollen tissue, or open sores in the mouth.",
+      },
     ],
     content_en: `## What is Lichen Planus?
 
@@ -2410,13 +2513,28 @@ Raadpleeg een arts voor een juiste diagnose als je onverklaarde paarse bultjes, 
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 6,
-    summary_en: "An autoimmune disease that can cause a distinctive butterfly-shaped rash across the cheeks and nose.",
-    summary_nl: "Een auto-immuunziekte die een kenmerkende vlindervormige huiduitslag over de wangen en neus kan veroorzaken.",
-    keywords: ["lupus", "butterfly rash", "malar rash", "autoimmune", "discoid lupus", "SLE"],
+    summary_en:
+      "An autoimmune disease that can cause a distinctive butterfly-shaped rash across the cheeks and nose.",
+    summary_nl:
+      "Een auto-immuunziekte die een kenmerkende vlindervormige huiduitslag over de wangen en neus kan veroorzaken.",
+    keywords: [
+      "lupus",
+      "butterfly rash",
+      "malar rash",
+      "autoimmune",
+      "discoid lupus",
+      "SLE",
+    ],
     related: ["rosacea", "eczema", "dermatomyositis"],
     faq: [
-      { q: "Is the butterfly rash always present in lupus?", a: "No, the malar (butterfly) rash occurs in about 40-50% of people with lupus and may come and go." },
-      { q: "Does sunlight trigger lupus skin symptoms?", a: "Yes, photosensitivity is very common in lupus. Sun exposure can trigger or worsen skin lesions." },
+      {
+        q: "Is the butterfly rash always present in lupus?",
+        a: "No, the malar (butterfly) rash occurs in about 40-50% of people with lupus and may come and go.",
+      },
+      {
+        q: "Does sunlight trigger lupus skin symptoms?",
+        a: "Yes, photosensitivity is very common in lupus. Sun exposure can trigger or worsen skin lesions.",
+      },
     ],
     content_en: `## What is Cutaneous Lupus Erythematosus?
 
@@ -2497,13 +2615,27 @@ Zoek direct medische hulp als je een vlindervormige huiduitslag, onverklaarde ko
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 7,
-    summary_en: "A rare inflammatory disease causing muscle weakness and a distinctive skin rash with purple/red discoloration.",
-    summary_nl: "Een zeldzame ontstekingsziekte die spierzwakte en een kenmerkende huiduitslag met paars/rode verkleuring veroorzaakt.",
-    keywords: ["dermatomyositis", "Gottron papules", "heliotrope rash", "muscle weakness", "connective tissue disease"],
+    summary_en:
+      "A rare inflammatory disease causing muscle weakness and a distinctive skin rash with purple/red discoloration.",
+    summary_nl:
+      "Een zeldzame ontstekingsziekte die spierzwakte en een kenmerkende huiduitslag met paars/rode verkleuring veroorzaakt.",
+    keywords: [
+      "dermatomyositis",
+      "Gottron papules",
+      "heliotrope rash",
+      "muscle weakness",
+      "connective tissue disease",
+    ],
     related: ["lupus", "eczema", "psoriasis"],
     faq: [
-      { q: "Is dermatomyositis related to cancer?", a: "Yes, there is an increased risk of malignancy, especially in adults over 40. Cancer screening is recommended." },
-      { q: "What is a Gottron papule?", a: "Gottron papules are flat-topped, reddish-purple bumps that appear over the knuckles, a characteristic sign of dermatomyositis." },
+      {
+        q: "Is dermatomyositis related to cancer?",
+        a: "Yes, there is an increased risk of malignancy, especially in adults over 40. Cancer screening is recommended.",
+      },
+      {
+        q: "What is a Gottron papule?",
+        a: "Gottron papules are flat-topped, reddish-purple bumps that appear over the knuckles, a characteristic sign of dermatomyositis.",
+      },
     ],
     content_en: `## What is Dermatomyositis?
 
@@ -2584,13 +2716,27 @@ Zoek dringend medische evaluatie bij progressieve spierzwakte met huiduitslag, s
     category_nl: "Ontstekingsziekten & Auto-immuun",
     icon: "🔥",
     order: 8,
-    summary_en: "A temporary skin rash that often begins with a single 'herald patch' followed by smaller oval spots on the body.",
-    summary_nl: "Een tijdelijke huiduitslag die vaak begint met een enkele 'primaire plaque' gevolgd door kleinere ovale plekjes op het lichaam.",
-    keywords: ["pityriasis rosea", "herald patch", "Christmas tree rash", "viral rash", "skin spots"],
+    summary_en:
+      "A temporary skin rash that often begins with a single 'herald patch' followed by smaller oval spots on the body.",
+    summary_nl:
+      "Een tijdelijke huiduitslag die vaak begint met een enkele 'primaire plaque' gevolgd door kleinere ovale plekjes op het lichaam.",
+    keywords: [
+      "pityriasis rosea",
+      "herald patch",
+      "Christmas tree rash",
+      "viral rash",
+      "skin spots",
+    ],
     related: ["psoriasis", "eczema", "tinea-versicolor"],
     faq: [
-      { q: "Is pityriasis rosea contagious?", a: "Pityriasis rosea is not considered highly contagious. It may be triggered by a viral infection but does not typically spread between people." },
-      { q: "How long does pityriasis rosea last?", a: "The rash typically lasts 6-8 weeks and resolves on its own without treatment, though it may persist up to 3 months." },
+      {
+        q: "Is pityriasis rosea contagious?",
+        a: "Pityriasis rosea is not considered highly contagious. It may be triggered by a viral infection but does not typically spread between people.",
+      },
+      {
+        q: "How long does pityriasis rosea last?",
+        a: "The rash typically lasts 6-8 weeks and resolves on its own without treatment, though it may persist up to 3 months.",
+      },
     ],
     content_en: `## What is Pityriasis Rosea?
 
@@ -2671,13 +2817,27 @@ Ga naar de dokter om de diagnose te bevestigen en andere aandoeningen uit te slu
     category_nl: "Infectieziekten — Schimmel",
     icon: "🦠",
     order: 9,
-    summary_en: "A fungal infection of the feet causing itching, scaling, and redness, commonly between the toes.",
-    summary_nl: "Een schimmelinfectie van de voeten die jeuk, schilfering en roodheid veroorzaakt, meestal tussen de tenen.",
-    keywords: ["athletes foot", "tinea pedis", "foot fungus", "toe fungus", "fungal infection"],
+    summary_en:
+      "A fungal infection of the feet causing itching, scaling, and redness, commonly between the toes.",
+    summary_nl:
+      "Een schimmelinfectie van de voeten die jeuk, schilfering en roodheid veroorzaakt, meestal tussen de tenen.",
+    keywords: [
+      "athletes foot",
+      "tinea pedis",
+      "foot fungus",
+      "toe fungus",
+      "fungal infection",
+    ],
     related: ["ringworm", "onychomycosis", "jock-itch"],
     faq: [
-      { q: "How do you get athlete's foot?", a: "It spreads through contact with infected skin flakes or fungi in moist environments like locker rooms, swimming pools, and shared towels." },
-      { q: "Can athlete's foot spread to other parts of the body?", a: "Yes, it can spread to the hands, groin (jock itch), and nails if you scratch the infected area and touch other parts." },
+      {
+        q: "How do you get athlete's foot?",
+        a: "It spreads through contact with infected skin flakes or fungi in moist environments like locker rooms, swimming pools, and shared towels.",
+      },
+      {
+        q: "Can athlete's foot spread to other parts of the body?",
+        a: "Yes, it can spread to the hands, groin (jock itch), and nails if you scratch the infected area and touch other parts.",
+      },
     ],
     content_en: `## What is Athlete's Foot?
 
@@ -2760,13 +2920,27 @@ Ga naar de dokter als vrij verkrijgbare behandelingen na 2 weken niet werken, je
     category_nl: "Infectieziekten — Schimmel",
     icon: "🦠",
     order: 10,
-    summary_en: "A fungal infection that creates a distinctive ring-shaped red rash on the body, despite its name having nothing to do with worms.",
-    summary_nl: "Een schimmelinfectie die een kenmerkende ringvormige rode uitslag op het lichaam veroorzaakt, ondanks dat de naam niets met wormen te maken heeft.",
-    keywords: ["ringworm", "tinea corporis", "circular rash", "fungal skin infection", "body ringworm"],
+    summary_en:
+      "A fungal infection that creates a distinctive ring-shaped red rash on the body, despite its name having nothing to do with worms.",
+    summary_nl:
+      "Een schimmelinfectie die een kenmerkende ringvormige rode uitslag op het lichaam veroorzaakt, ondanks dat de naam niets met wormen te maken heeft.",
+    keywords: [
+      "ringworm",
+      "tinea corporis",
+      "circular rash",
+      "fungal skin infection",
+      "body ringworm",
+    ],
     related: ["athletes-foot", "jock-itch", "tinea-versicolor"],
     faq: [
-      { q: "Is ringworm actually caused by a worm?", a: "No, despite its name, ringworm is caused by a fungus, not a worm. The name comes from the ring-like appearance of the rash." },
-      { q: "Can you get ringworm from pets?", a: "Yes, ringworm is zoonotic and can be transmitted from cats, dogs, and other animals to humans." },
+      {
+        q: "Is ringworm actually caused by a worm?",
+        a: "No, despite its name, ringworm is caused by a fungus, not a worm. The name comes from the ring-like appearance of the rash.",
+      },
+      {
+        q: "Can you get ringworm from pets?",
+        a: "Yes, ringworm is zoonotic and can be transmitted from cats, dogs, and other animals to humans.",
+      },
     ],
     content_en: `## What is Ringworm?
 
@@ -2847,7 +3021,10 @@ Ga naar de dokter als de uitslag niet verbetert met vrij verkrijgbare behandelin
 
 // Generate files
 function slugify(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 function writeConditionsFile(cond: Condition, lang: "nl" | "en") {
@@ -2860,7 +3037,7 @@ function writeConditionsFile(cond: Condition, lang: "nl" | "en") {
   const content = lang === "nl" ? cond.content_nl : cond.content_en;
   const seo_title = `${title} — Hulp Bij Huid`;
   const seo_description = summary;
-  const faq = cond.faq.map(f => ({
+  const faq = cond.faq.map((f) => ({
     q: lang === "nl" ? f.q : f.q, // TODO: translate FAQs
     a: lang === "nl" ? f.a : f.a,
   }));
@@ -2888,9 +3065,13 @@ function writeConditionsFile(cond: Condition, lang: "nl" | "en") {
     .map(([k, v]) => {
       if (Array.isArray(v)) {
         if (v.length === 0) return `${k}: []`;
-        return `${k}:\n${v.map(item =>
-          typeof item === "object" ? `  - q: "${item.q}"\n    a: "${item.a}"` : `  - "${item}"`
-        ).join("\n")}`;
+        return `${k}:\n${v
+          .map((item) =>
+            typeof item === "object"
+              ? `  - q: "${item.q}"\n    a: "${item.a}"`
+              : `  - "${item}"`,
+          )
+          .join("\n")}`;
       }
       if (typeof v === "string") return `${k}: "${v}"`;
       return `${k}: ${v}`;
@@ -2907,7 +3088,9 @@ conditions.forEach((cond) => {
 });
 
 console.log(`Generated ${conditions.length} conditions in NL and EN.`);
-console.log("NOTE: This script generates the first batch. Extend conditions array for all 50.");
+console.log(
+  "NOTE: This script generates the first batch. Extend conditions array for all 50.",
+);
 ```
 
 - [ ] **Step 2: Install tsx and run the script**
@@ -2937,6 +3120,7 @@ git commit -m "feat: add content generation script and first batch of 10 skin co
 ## Task 9: Remaining 40 Skin Conditions
 
 **Files:**
+
 - Modify: `scripts/generate-conditions.ts` — append remaining 40 conditions to the array
 
 - [ ] **Step 1:Continued content generation for remaining conditions**
@@ -3041,19 +3225,19 @@ See plan details for Task 13 (.github/workflows/deploy.yml, CNAME).
 
 ## Plan Summary
 
-| Task | Description |
-|------|-------------|
-| 1 | Project scaffolding (Astro, Tailwind v4, config) |
-| 2 | i18n infrastructure (translations, locale routing) |
-| 3 | Content collection schemas |
-| 4 | SEO component (meta, OG, hreflang, JSON-LD) |
-| 5 | Base layout, Header, Footer, LanguageToggle, Breadcrumbs |
-| 6 | Homepage with hero, search, and featured conditions |
-| 7 | Conditions overview + detail pages with A-Z, categories, FAQ |
-| 8-9 | Content generation: 50 skin conditions (NL + EN) |
-| 10 | Static pages: About, When to See a Doctor |
-| 11 | Blog pages (overview + detail for NL and EN) |
-| 12 | Search index JSON endpoint |
-| 13 | GitHub Actions CI/CD for GitHub Pages |
-| 14 | Final build verification and push |
-| 15 | Post-deployment URL checks |
+| Task | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 1    | Project scaffolding (Astro, Tailwind v4, config)             |
+| 2    | i18n infrastructure (translations, locale routing)           |
+| 3    | Content collection schemas                                   |
+| 4    | SEO component (meta, OG, hreflang, JSON-LD)                  |
+| 5    | Base layout, Header, Footer, LanguageToggle, Breadcrumbs     |
+| 6    | Homepage with hero, search, and featured conditions          |
+| 7    | Conditions overview + detail pages with A-Z, categories, FAQ |
+| 8-9  | Content generation: 50 skin conditions (NL + EN)             |
+| 10   | Static pages: About, When to See a Doctor                    |
+| 11   | Blog pages (overview + detail for NL and EN)                 |
+| 12   | Search index JSON endpoint                                   |
+| 13   | GitHub Actions CI/CD for GitHub Pages                        |
+| 14   | Final build verification and push                            |
+| 15   | Post-deployment URL checks                                   |

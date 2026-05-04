@@ -11,15 +11,15 @@
 
 ## Tech Stack
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Astro (static site generation) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 |
-| Content | Astro Content Collections (Markdown + frontmatter) |
-| Icons | Astro Icon / inline SVGs |
-| Deployment | GitHub Pages via GitHub Actions |
-| Domain | Custom domain via CNAME record |
+| Layer      | Choice                                             |
+| ---------- | -------------------------------------------------- |
+| Framework  | Astro (static site generation)                     |
+| Language   | TypeScript                                         |
+| Styling    | Tailwind CSS v4                                    |
+| Content    | Astro Content Collections (Markdown + frontmatter) |
+| Icons      | Astro Icon / inline SVGs                           |
+| Deployment | GitHub Pages via GitHub Actions                    |
+| Domain     | Custom domain via CNAME record                     |
 
 ## i18n Strategy
 
@@ -34,17 +34,17 @@
 
 ### Pages / Routes
 
-| Dutch URL | English URL | Content |
-|-----------|-------------|---------|
-| `/` | `/en/` | Homepage |
-| `/aandoeningen/` | `/en/conditions/` | Conditions overview (A-Z + categories) |
-| `/aandoeningen/[slug]/` | `/en/conditions/[slug]/` | Individual condition page |
-| `/blog/` | `/en/blog/` | Blog overview |
-| `/blog/[slug]/` | `/en/blog/[slug]/` | Blog article |
-| `/over-ons/` | `/en/about/` | About page |
-| `/wanneer-naar-de-dokter/` | `/en/when-to-see-doctor/` | "When to see a doctor" guide |
-| `/sitemap.xml` | — | Sitemap (bilingual) |
-| `/robots.txt` | — | Robots directive |
+| Dutch URL                  | English URL               | Content                                |
+| -------------------------- | ------------------------- | -------------------------------------- |
+| `/`                        | `/en/`                    | Homepage                               |
+| `/aandoeningen/`           | `/en/conditions/`         | Conditions overview (A-Z + categories) |
+| `/aandoeningen/[slug]/`    | `/en/conditions/[slug]/`  | Individual condition page              |
+| `/blog/`                   | `/en/blog/`               | Blog overview                          |
+| `/blog/[slug]/`            | `/en/blog/[slug]/`        | Blog article                           |
+| `/over-ons/`               | `/en/about/`              | About page                             |
+| `/wanneer-naar-de-dokter/` | `/en/when-to-see-doctor/` | "When to see a doctor" guide           |
+| `/sitemap.xml`             | —                         | Sitemap (bilingual)                    |
+| `/robots.txt`              | —                         | Robots directive                       |
 
 ### Source File Structure
 
@@ -118,16 +118,16 @@ src/
 
 ### Color Palette (Soft Clinical)
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--color-bg` | `#f8fafc` (slate-50) | Page background |
-| `--color-surface` | `#ffffff` | Cards, containers |
-| `--color-primary` | `#0d9488` (teal-600) | Headers, links, CTAs |
-| `--color-primary-dark` | `#0f766e` (teal-700) | Hover states |
-| `--color-accent` | `#3b82f6` (blue-500) | Accent highlights |
-| `--color-text` | `#1e293b` (slate-800) | Body text |
-| `--color-text-muted` | `#64748b` (slate-500) | Secondary text |
-| `--color-border` | `#e2e8f0` (slate-200) | Dividers, borders |
+| Token                  | Value                 | Usage                |
+| ---------------------- | --------------------- | -------------------- |
+| `--color-bg`           | `#f8fafc` (slate-50)  | Page background      |
+| `--color-surface`      | `#ffffff`             | Cards, containers    |
+| `--color-primary`      | `#0d9488` (teal-600)  | Headers, links, CTAs |
+| `--color-primary-dark` | `#0f766e` (teal-700)  | Hover states         |
+| `--color-accent`       | `#3b82f6` (blue-500)  | Accent highlights    |
+| `--color-text`         | `#1e293b` (slate-800) | Body text            |
+| `--color-text-muted`   | `#64748b` (slate-500) | Secondary text       |
+| `--color-border`       | `#e2e8f0` (slate-200) | Dividers, borders    |
 
 ### Typography
 
@@ -150,15 +150,15 @@ src/
 
 ```yaml
 ---
-title: "Eczema"                        # English title
-title_nl: "Eczema"                     # Dutch title (or could be "Eczeem")
+title: "Eczema" # English title
+title_nl: "Eczema" # Dutch title (or could be "Eczeem")
 slug: "eczema"
-category: "inflammatory"               # Map to category key
+category: "inflammatory" # Map to category key
 category_nl: "ontstekingsziekten"
-order: 1                               # Display order in category
-icon: "flame"                          # Icon identifier
-summary: "A brief TL;DR for cards"     # ~30 words
-summary_nl: "Een korte samenvatting"   # ~30 words Dutch
+order: 1 # Display order in category
+icon: "flame" # Icon identifier
+summary: "A brief TL;DR for cards" # ~30 words
+summary_nl: "Een korte samenvatting" # ~30 words Dutch
 seo:
   title: "Eczema - Symptoms, Causes & Treatment | Hulp Bij Huid"
   description: "Comprehensive guide to eczema on Hulp Bij Huid..."
@@ -174,6 +174,7 @@ published: true
 ### Condition content sections
 
 Each markdown file contains:
+
 1. **What is it?** — description
 2. **Symptoms** — bullet list
 3. **Causes & Risk Factors** — bullet list
@@ -184,6 +185,7 @@ Each markdown file contains:
 ## SEO Strategy
 
 ### Per-page SEO (in `BaseLayout.astro`)
+
 - Unique `<title>` and `<meta name="description">`
 - `<link rel="canonical">`
 - `<meta property="og:*">` (title, description, image, url, locale)
@@ -193,6 +195,7 @@ Each markdown file contains:
 - `<link rel="alternate" hreflang="x-default" href="...">`
 
 ### Structured Data (JSON-LD)
+
 - `MedicalCondition` — per condition page
 - `FAQPage` — per condition page (FAQ section)
 - `BreadcrumbList` — every page
@@ -203,6 +206,7 @@ Each markdown file contains:
 - `Article` — per content page
 
 ### Technical SEO
+
 - `sitemap.xml` — all pages with priority/canonical
 - `robots.txt` — allow all crawl
 - Semantic HTML5 (`<article>`, `<nav>`, `<main>`, `<section>`, `<header>`, `<footer>`)
@@ -217,6 +221,7 @@ Each markdown file contains:
 ### Categories & Conditions
 
 #### 🧬 Inflammatory & Auto-immune (8)
+
 1. Eczema (Atopic Dermatitis)
 2. Psoriasis
 3. Rosacea
@@ -227,6 +232,7 @@ Each markdown file contains:
 8. Pityriasis Rosea
 
 #### 🦠 Infectious — Fungal (6)
+
 9. Athlete's Foot (Tinea Pedis)
 10. Ringworm (Tinea Corporis)
 11. Candidiasis (Yeast Infection)
@@ -235,6 +241,7 @@ Each markdown file contains:
 14. Onychomycosis (Nail Fungus)
 
 #### 🦠 Infectious — Bacterial (5)
+
 15. Impetigo
 16. Cellulitis
 17. Folliculitis
@@ -242,6 +249,7 @@ Each markdown file contains:
 19. Erysipelas
 
 #### 🦠 Infectious — Viral (5)
+
 20. Warts (Verruca)
 21. Cold Sores (Herpes Simplex)
 22. Shingles (Herpes Zoster)
@@ -249,12 +257,14 @@ Each markdown file contains:
 24. Hand-Foot-and-Mouth Disease
 
 #### 🎨 Pigmentary (4)
+
 25. Vitiligo
 26. Melasma
 27. Post-inflammatory Hyperpigmentation
 28. Albinism (Oculocutaneous)
 
 #### 🔴 Acne & Related (5)
+
 29. Acne Vulgaris
 30. Hidradenitis Suppurativa
 31. Perioral Dermatitis
@@ -262,6 +272,7 @@ Each markdown file contains:
 33. Milia
 
 #### 🫘 Growths & Lesions (6)
+
 34. Seborrheic Keratosis
 35. Cherry Angioma
 36. Dermatofibroma
@@ -270,6 +281,7 @@ Each markdown file contains:
 39. Actinic Keratosis
 
 #### 🧴 Reactive & Allergic (5)
+
 40. Contact Dermatitis
 41. Urticaria (Hives)
 42. Angioedema
@@ -277,16 +289,19 @@ Each markdown file contains:
 44. Erythema Multiforme
 
 #### 💇 Hair & Nail (3)
+
 45. Alopecia Areata
 46. Ingrown Toenail (Onychocryptosis)
 47. Dandruff (Pityriasis Capitis)
 
 #### ☀️ Sun & Environment (3)
+
 48. Sunburn
 49. Polymorphous Light Eruption
 50. Frostnip / Chilblains
 
 ### Content quality
+
 - Each condition: 300-500 words of medically-informed content
 - SEO-optimized per Google E-E-A-T guidelines
 - No medical claims that overpromise — responsible health content
@@ -294,6 +309,7 @@ Each markdown file contains:
 - Internal links between related conditions (minimum 3 per page)
 
 ## Blog
+
 - Blog posts linked from related conditions and homepage
 - Categories: treatment, prevention, lifestyle, news, "when to see a doctor"
 - Tag system for cross-referencing
@@ -302,14 +318,14 @@ Each markdown file contains:
 
 ## Performance Budget
 
-| Metric | Target |
-|--------|--------|
-| Lighthouse Performance | ≥ 95 |
-| First Contentful Paint | ≤ 1.0s |
-| Largest Contentful Paint | ≤ 1.5s |
-| Total Bundle (JS) | ≤ 50KB |
-| Total Bundle (CSS) | ≤ 30KB |
-| Images | None (icon-only, SVG) |
+| Metric                   | Target                |
+| ------------------------ | --------------------- |
+| Lighthouse Performance   | ≥ 95                  |
+| First Contentful Paint   | ≤ 1.0s                |
+| Largest Contentful Paint | ≤ 1.5s                |
+| Total Bundle (JS)        | ≤ 50KB                |
+| Total Bundle (CSS)       | ≤ 30KB                |
+| Images                   | None (icon-only, SVG) |
 
 ## Deployment
 
@@ -330,4 +346,4 @@ Each markdown file contains:
 
 ---
 
-*Spec approved 2026-05-04. Next step: implementation plan.*
+_Spec approved 2026-05-04. Next step: implementation plan._
