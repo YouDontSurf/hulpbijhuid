@@ -29,6 +29,11 @@ export const translations = {
     backToConditions: "Terug naar aandoeningen",
     backToBlog: "Terug naar blog",
     sharePage: "Deel deze pagina",
+    information: "Informatie",
+    disclaimer: "Disclaimer",
+    disclaimerText:
+      "De informatie op Hulp Bij Huid is uitsluitend voor educatieve doeleinden. Raadpleeg altijd een arts voor medisch advies.",
+    allRightsReserved: "Alle rechten voorbehouden.",
   },
   en: {
     siteName: "Hulp Bij Huid",
@@ -56,6 +61,11 @@ export const translations = {
     backToConditions: "Back to conditions",
     backToBlog: "Back to blog",
     sharePage: "Share this page",
+    information: "Information",
+    disclaimer: "Disclaimer",
+    disclaimerText:
+      "The information on Hulp Bij Huid is for educational purposes only. Always consult a doctor for medical advice.",
+    allRightsReserved: "All rights reserved.",
   },
 } as const;
 

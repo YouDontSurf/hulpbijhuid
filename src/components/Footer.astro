@@ -1,11 +1,11 @@
 ---
 // src/components/Footer.astro
 import { t } from "../i18n/translations";
+import { getLocalizedHref } from "../i18n/config";
 import type { Locale } from "../i18n/config";
 
 interface Props { locale?: Locale; }
 const { locale = "nl" } = Astro.props;
-const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path === "/" ? "/" : path}`;
 ---
 
 <footer class="bg-white border-t border-border mt-16">
@@ -13,7 +13,7 @@ const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path ===
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
       <!-- Brand -->
       <div>
-        <a href={getHref("/")} class="flex items-center gap-2 font-bold text-lg text-primary no-underline mb-3">
+        <a href={getLocalizedHref("/", locale)} class="flex items-center gap-2 font-bold text-lg text-primary no-underline mb-3">
           <span class="bg-primary text-white w-8 h-8 rounded-lg flex items-center justify-center">H</span>
           {t("siteName", locale)}
         </a>
@@ -23,28 +23,24 @@ const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path ===
       <div>
         <h3 class="font-semibold text-sm mb-3 text-text">{t("conditions", locale)}</h3>
         <ul class="space-y-2 text-sm">
-          <li><a href={getHref("/aandoeningen/")} class="text-text-muted hover:text-primary">{t("allConditions", locale)}</a></li>
-          <li><a href={getHref("/wanneer-naar-de-dokter/")} class="text-text-muted hover:text-primary">{t("doctor", locale)}</a></li>
+          <li><a href={getLocalizedHref("/aandoeningen/", locale)} class="text-text-muted hover:text-primary">{t("allConditions", locale)}</a></li>
+          <li><a href={getLocalizedHref("/wanneer-naar-de-dokter/", locale)} class="text-text-muted hover:text-primary">{t("doctor", locale)}</a></li>
         </ul>
       </div>
       <div>
-        <h3 class="font-semibold text-sm mb-3 text-text">{locale === "nl" ? "Informatie" : "Information"}</h3>
+        <h3 class="font-semibold text-sm mb-3 text-text">{t("information", locale)}</h3>
         <ul class="space-y-2 text-sm">
-          <li><a href={getHref("/over-ons/")} class="text-text-muted hover:text-primary">{t("about", locale)}</a></li>
-          <li><a href={getHref("/blog/")} class="text-text-muted hover:text-primary">{t("blog", locale)}</a></li>
+          <li><a href={getLocalizedHref("/over-ons/", locale)} class="text-text-muted hover:text-primary">{t("about", locale)}</a></li>
+          <li><a href={getLocalizedHref("/blog/", locale)} class="text-text-muted hover:text-primary">{t("blog", locale)}</a></li>
         </ul>
       </div>
       <div>
-        <h3 class="font-semibold text-sm mb-3 text-text">{locale === "nl" ? "Disclaimer" : "Disclaimer"}</h3>
-        <p class="text-text-muted text-xs leading-relaxed">
-          {locale === "nl"
-            ? "De informatie op Hulp Bij Huid is uitsluitend voor educatieve doeleinden. Raadpleeg altijd een arts voor medisch advies."
-            : "The information on Hulp Bij Huid is for educational purposes only. Always consult a doctor for medical advice."}
-        </p>
+        <h3 class="font-semibold text-sm mb-3 text-text">{t("disclaimer", locale)}</h3>
+        <p class="text-text-muted text-xs leading-relaxed">{t("disclaimerText", locale)}</p>
       </div>
     </div>
     <div class="border-t border-border mt-8 pt-6 text-center text-xs text-text-muted">
-      &copy; {new Date().getFullYear()} {t("siteName", locale)}. {locale === "nl" ? "Alle rechten voorbehouden." : "All rights reserved."}
+      &copy; {new Date().getFullYear()} {t("siteName", locale)}. {t("allRightsReserved", locale)}
     </div>
   </div>
 </footer>

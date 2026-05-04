@@ -1,6 +1,7 @@
 ---
 // src/components/Header.astro
 import { t } from "../i18n/translations";
+import { getLocalizedHref } from "../i18n/config";
 import LanguageToggle from "./LanguageToggle.astro";
 import type { Locale } from "../i18n/config";
 
@@ -9,30 +10,29 @@ interface Props {
   currentPath?: string;
 }
 const { locale = "nl", currentPath = "/" } = Astro.props;
-const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path === "/" ? "/" : path}`;
 ---
 
 <header class="bg-white border-b border-border sticky top-0 z-50">
   <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
-      <a href={getHref("/")} class="flex items-center gap-2 font-bold text-xl text-primary no-underline hover:text-primary-dark transition-colors">
+      <a href={getLocalizedHref("/", locale)} class="flex items-center gap-2 font-bold text-xl text-primary no-underline hover:text-primary-dark transition-colors">
         <span class="bg-primary text-white w-9 h-9 rounded-lg flex items-center justify-center text-lg font-bold">H</span>
         {t("siteName", locale)}
       </a>
 
       <!-- Desktop Nav -->
       <div class="hidden md:flex items-center gap-6">
-        <a href={getHref("/aandoeningen/")} class="text-text hover:text-primary transition-colors font-medium text-sm">
+        <a href={getLocalizedHref("/aandoeningen/", locale)} class="text-text hover:text-primary transition-colors font-medium text-sm">
           {t("conditions", locale)}
         </a>
-        <a href={getHref("/blog/")} class="text-text hover:text-primary transition-colors font-medium text-sm">
+        <a href={getLocalizedHref("/blog/", locale)} class="text-text hover:text-primary transition-colors font-medium text-sm">
           {t("blog", locale)}
         </a>
-        <a href={getHref("/wanneer-naar-de-dokter/")} class="text-text hover:text-primary transition-colors font-medium text-sm">
+        <a href={getLocalizedHref("/wanneer-naar-de-dokter/", locale)} class="text-text hover:text-primary transition-colors font-medium text-sm">
           {t("doctor", locale)}
         </a>
-        <a href={getHref("/over-ons/")} class="text-text hover:text-primary transition-colors font-medium text-sm">
+        <a href={getLocalizedHref("/over-ons/", locale)} class="text-text hover:text-primary transition-colors font-medium text-sm">
           {t("about", locale)}
         </a>
         <LanguageToggle locale={locale} currentPath={currentPath} />
@@ -41,8 +41,14 @@ const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path ===
       <!-- Mobile hamburger -->
       <div class="md:hidden flex items-center gap-3">
         <LanguageToggle locale={locale} currentPath={currentPath} />
-        <button id="mobile-menu-btn" class="text-text p-2" aria-label="Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <button
+          id="mobile-menu-btn"
+          class="text-text p-2"
+          aria-label={locale === "nl" ? "Menu" : "Menu"}
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
       </div>
     </div>
@@ -50,10 +56,10 @@ const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path ===
     <!-- Mobile menu (hidden by default) -->
     <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-border pt-4">
       <div class="flex flex-col gap-3">
-        <a href={getHref("/aandoeningen/")} class="text-text hover:text-primary font-medium">{t("conditions", locale)}</a>
-        <a href={getHref("/blog/")} class="text-text hover:text-primary font-medium">{t("blog", locale)}</a>
-        <a href={getHref("/wanneer-naar-de-dokter/")} class="text-text hover:text-primary font-medium">{t("doctor", locale)}</a>
-        <a href={getHref("/over-ons/")} class="text-text hover:text-primary font-medium">{t("about", locale)}</a>
+        <a href={getLocalizedHref("/aandoeningen/", locale)} class="text-text hover:text-primary font-medium">{t("conditions", locale)}</a>
+        <a href={getLocalizedHref("/blog/", locale)} class="text-text hover:text-primary font-medium">{t("blog", locale)}</a>
+        <a href={getLocalizedHref("/wanneer-naar-de-dokter/", locale)} class="text-text hover:text-primary font-medium">{t("doctor", locale)}</a>
+        <a href={getLocalizedHref("/over-ons/", locale)} class="text-text hover:text-primary font-medium">{t("about", locale)}</a>
       </div>
     </div>
   </nav>
@@ -64,7 +70,16 @@ const getHref = (path: string) => locale === "nl" ? path : `/${locale}${path ===
   const menu = document.getElementById("mobile-menu");
   if (btn && menu) {
     btn.addEventListener("click", () => {
+      const expanded = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!expanded));
       menu.classList.toggle("hidden");
+    });
+    menu.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        menu.classList.add("hidden");
+        btn.setAttribute("aria-expanded", "false");
+        btn.focus();
+      }
     });
   }
 </script>
