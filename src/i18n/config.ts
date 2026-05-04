@@ -76,27 +76,50 @@ export function getLocalizedPath(
  * locale-correct version for any locale.
  */
 export function getLocalizedHref(path: string, locale: Locale): string {
-	if (locale === "nl") return path.endsWith("/") ? path : path + "/";
+	let result: string;
 
-	const normalPath = path.endsWith("/") ? path : path + "/";
+	if (locale === "nl") {
+		result = path.endsWith("/") ? path : path + "/";
+	} else {
+		const normalPath = path.endsWith("/") ? path : path + "/";
 
-	// Sort routeMap entries by prefix length descending for correct matching
-	const routes = Object.values(routeMap).sort(
-		(a, b) => b.nl.length - a.nl.length,
-	);
+		// Sort routeMap entries by prefix length descending for correct matching
+		const routes = Object.values(routeMap).sort(
+			(a, b) => b.nl.length - a.nl.length,
+		);
 
-	for (const route of routes) {
-		if (normalPath === route.nl) {
-			return route.en;
+		for (const route of routes) {
+			if (normalPath === route.nl) {
+				result = route.en;
+				break;
+			}
+			if (normalPath.startsWith(route.nl)) {
+				const rest = normalPath.slice(route.nl.length);
+				result = `${route.en}${rest}`;
+				break;
+			}
 		}
-		if (normalPath.startsWith(route.nl)) {
-			const rest = normalPath.slice(route.nl.length);
-			return `${route.en}${rest}`;
-		}
+
+		result ||= `/en${normalPath}`;
 	}
 
-	// Fallback: just prefix with /en/
-	return `/en${normalPath}`;
+	return basePath(result);
+}
+
+/**
+ * Prepend the Astro `base` path for GitHub Pages path-based deployments.
+ * Falls back to "/" for custom domain deployments or when BASE_URL is not available.
+ * @example basePath("/aandoeningen/") -> "/hulpbijhuid/aandoeningen/"
+ */
+export function basePath(path: string): string {
+	const base: string =
+		typeof import.meta !== "undefined" &&
+		(import.meta.env as Record<string, string>)?.BASE_URL
+			? (import.meta.env as Record<string, string>).BASE_URL
+			: "/";
+	if (base === "/" || base === "") return path;
+	const clean = path.startsWith("/") ? path : "/" + path;
+	return `${base.replace(/\/$/, "")}${clean}`;
 }
 
 export function getAlternateUrls(

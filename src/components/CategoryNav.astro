@@ -1,5 +1,6 @@
 ---
 // src/components/CategoryNav.astro
+import { basePath } from "../i18n/config";
 import type { Locale } from "../i18n/config";
 
 interface Category {
@@ -19,7 +20,7 @@ const { categories, locale = "nl", activeCategory } = Astro.props;
 const allLabel = locale === "nl" ? "Alle" : "All";
 const getCatHref = (key: string) => {
   const base = locale === "nl" ? "/aandoeningen/" : "/en/conditions/";
-  return key ? `${base}?categorie=${key}` : base;
+  return basePath(key ? `${base}?categorie=${key}` : base);
 };
 ---
 

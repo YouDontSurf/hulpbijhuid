@@ -9,7 +9,7 @@ interface Props {
   locale?: "nl" | "en";
 }
 const { conditions, title, locale = "nl" } = Astro.props;
-const basePath = locale === "nl" ? "/aandoeningen" : "/en/conditions";
+const baseSlug = locale === "nl" ? "/aandoeningen" : "/en/conditions";
 ---
 
 {conditions.length > 0 && (
@@ -19,7 +19,7 @@ const basePath = locale === "nl" ? "/aandoeningen" : "/en/conditions";
       {conditions.map((c) => (
         <ConditionCard
           title={locale === "nl" ? (c.data.title_nl || c.data.title) : c.data.title}
-          slug={`${basePath}/${c.data.slug}/`}
+          slug={`${baseSlug}/${c.data.slug}/`}
           category={locale === "nl" ? (c.data.category_nl || c.data.category) : c.data.category}
           summary={locale === "nl" ? (c.data.summary_nl || c.data.summary) : c.data.summary}
         />

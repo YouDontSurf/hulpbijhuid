@@ -1,5 +1,7 @@
 ---
 // src/components/BlogCard.astro
+import { basePath } from "../i18n/config";
+
 interface Props {
   title: string;
   slug: string;
@@ -17,7 +19,7 @@ const formattedDate = date.toLocaleDateString("nl-NL", { year: "numeric", month:
   itemscope
   itemtype="https://schema.org/BlogPosting"
 >
-  <a href={slug} class="block p-6 no-underline">
+  <a href={basePath(slug)} class="block p-6 no-underline">
     <div class="flex items-center gap-2 text-xs text-text-muted mb-3">
       <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{category}</span>
       <span>·</span>
