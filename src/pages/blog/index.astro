@@ -1,0 +1,55 @@
+---
+// src/pages/blog/index.astro
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import { getCollection } from "astro:content";
+
+const locale = "nl" as const;
+const allPosts = await getCollection("blog_nl", ({ data }) => data.published);
+allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const canonicalURL = new URL("https://hulpbijhuid.nl/blog/");
+const jsonLd = [{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Blog — Hulp Bij Huid",
+  description: "Artikelen over huidaandoeningen, huidverzorging en gezondheid.",
+  url: canonicalURL.href,
+}];
+---
+
+<BaseLayout
+  title="Blog — Hulp Bij Huid"
+  description="Artikelen over huidaandoeningen, huidverzorging en gezondheid. Blijf op de hoogte van de nieuwste inzichten."
+  locale="nl"
+  canonicalURL={canonicalURL}
+  alternateEn="https://hulpbijhuid.nl/en/blog/"
+  xDefault="https://hulpbijhuid.nl/blog/"
+  jsonLd={jsonLd}
+  currentPath="/blog/"
+>
+  <Breadcrumbs crumbs={[{ label: "Blog" }]} locale={locale} />
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-text mb-2">Blog</h1>
+    <p class="text-text-muted mb-8">Artikelen over huidaandoeningen, huidverzorging en gezondheid.</p>
+
+    <div class="space-y-6">
+      {allPosts.length === 0 ? (
+        <p class="text-text-muted">Geen blogartikelen gevonden.</p>
+      ) : (
+        allPosts.map((post) => (
+          <BlogCard
+            title={post.data.title_nl || post.data.title}
+            slug={`/blog/${post.data.slug}/`}
+            summary={post.data.summary_nl || post.data.summary}
+            date={post.data.date}
+            readingTime={post.data.readingTime}
+            category={post.data.category_nl || post.data.category}
+          />
+        ))
+      )}
+    </div>
+  </section>
+</BaseLayout>

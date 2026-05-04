@@ -1,0 +1,93 @@
+---
+// src/pages/blog/[slug].astro
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BlogCard from "../../components/BlogCard.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog_nl", ({ data }) => data.published);
+  return posts.map((p) => ({
+    params: { slug: p.data.slug },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"blog_nl"> };
+const { Content } = await render(post);
+const allPosts = await getCollection("blog_nl", ({ data }) => data.published);
+const related = allPosts
+  .filter(p => p.data.slug !== post.data.slug && p.data.category === post.data.category)
+  .slice(0, 2);
+
+// Map NL slugs to EN slugs for hreflang
+const slugToEn: Record<string, string> = {
+  "winter-huidverzorging": "winter-skincare",
+  "verschil-eczeem-psoriasis": "eczema-vs-psoriasis",
+  "zonbescherming-spf": "sun-protection-spf",
+};
+const enSlug = slugToEn[post.data.slug] || post.data.slug;
+
+const formattedDate = post.data.date.toLocaleDateString("nl-NL", { year: "numeric", month: "long", day: "numeric" });
+const canonicalURL = new URL(`https://hulpbijhuid.nl/blog/${post.data.slug}/`);
+const jsonLd = [{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title_nl || post.data.title,
+  description: post.data.summary_nl || post.data.summary,
+  datePublished: post.data.date.toISOString(),
+  dateModified: (post.data.updated || post.data.date).toISOString(),
+  author: { "@type": "Person", name: post.data.author },
+  url: canonicalURL.href,
+}];
+---
+
+<BaseLayout
+  title={post.data.seo_title}
+  description={post.data.seo_description}
+  locale="nl"
+  canonicalURL={canonicalURL}
+  alternateEn={`https://hulpbijhuid.nl/en/blog/${enSlug}/`}
+  xDefault={canonicalURL.href}
+  jsonLd={jsonLd}
+  currentPath={`/blog/${post.data.slug}/`}
+>
+  <Breadcrumbs crumbs={[
+    { label: "Blog", href: "/blog/" },
+    { label: post.data.title_nl || post.data.title },
+  ]} locale="nl" />
+
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="flex items-center gap-2 text-xs text-text-muted mb-4">
+      <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{post.data.category_nl || post.data.category}</span>
+      <span>·</span>
+      <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+      <span>·</span>
+      <span>{post.data.readingTime} min leestijd</span>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-bold text-text mb-4">{post.data.title_nl || post.data.title}</h1>
+    <p class="text-text-muted mb-8 text-lg">{post.data.summary_nl || post.data.summary}</p>
+
+    <div class="prose prose-slate max-w-none">
+      <Content />
+    </div>
+
+    {related.length > 0 && (
+      <section class="mt-12 pt-8 border-t border-gray-200">
+        <h2 class="text-xl font-bold text-text mb-6">Gerelateerde Artikelen</h2>
+        <div class="space-y-4">
+          {related.map((rp) => (
+            <BlogCard
+              title={rp.data.title_nl || rp.data.title}
+              slug={`/blog/${rp.data.slug}/`}
+              summary={rp.data.summary_nl || rp.data.summary}
+              date={rp.data.date}
+              readingTime={rp.data.readingTime}
+              category={rp.data.category_nl || rp.data.category}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>
