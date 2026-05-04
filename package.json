@@ -1,0 +1,20 @@
+{
+  "name": "hulpbijhuid",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "generate": "tsx scripts/generate-conditions.ts"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.2.2",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0"
+  }
+}
